@@ -88,6 +88,8 @@ module Backup
       #
       # If successful, +dump_packaging_path+ is removed.
       def package!
+        return if model.skip_packaging?
+
         pipeline = Pipeline.new
         dump_ext = "tar"
 

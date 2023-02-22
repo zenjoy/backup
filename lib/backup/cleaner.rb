@@ -49,6 +49,8 @@ module Backup
       ##
       # Remove the temporary folder used during packaging
       def remove_packaging(model)
+        return if model.skip_packaging?
+
         Logger.info "Cleaning up the temporary files..."
         FileUtils.rm_rf(File.join(Config.tmp_path, model.trigger))
       end

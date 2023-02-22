@@ -47,6 +47,10 @@ module Backup
         Logger.info "#{storage_name} Finished!"
       end
 
+      def skip_packaging?
+        false
+      end
+
       private
 
       ##

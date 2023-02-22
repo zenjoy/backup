@@ -289,6 +289,10 @@ module Backup
       elapsed_time(started_at, finished_at)
     end
 
+    def skip_packaging?
+      storages&.any? { |storage| storage.skip_packaging? }
+    end
+
     private
 
     ##

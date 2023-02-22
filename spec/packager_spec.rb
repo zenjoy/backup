@@ -19,6 +19,7 @@ describe "Backup::Packager" do
 
     context "when pipeline command is successful" do
       it "should setup variables and perform packaging procedures" do
+        expect(model).to receive(:skip_packaging?).ordered.and_return(false)
         expect(model).to receive(:package).ordered.and_return(package)
         expect(model).to receive(:encryptor).ordered.and_return(encryptor)
         expect(model).to receive(:splitter).ordered.and_return(splitter)
@@ -46,6 +47,7 @@ describe "Backup::Packager" do
 
     context "when pipeline command is not successful" do
       it "should raise an error" do
+        expect(model).to receive(:skip_packaging?).ordered.and_return(false)
         expect(model).to receive(:package).ordered.and_return(package)
         expect(model).to receive(:encryptor).ordered.and_return(encryptor)
         expect(model).to receive(:splitter).ordered.and_return(splitter)

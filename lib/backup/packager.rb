@@ -8,6 +8,10 @@ module Backup
       ##
       # Build the final package for the backup model.
       def package!(model)
+        if model.skip_packaging?
+          Logger.info "Skip packaging..." && return
+        end
+
         @package   = model.package
         @encryptor = model.encryptor
         @splitter  = model.splitter
