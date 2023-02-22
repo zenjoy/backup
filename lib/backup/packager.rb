@@ -8,7 +8,9 @@ module Backup
       ##
       # Build the final package for the backup model.
       def package!(model)
-        Logger.info "Skip packaging..." && return if model.storages.length == 1 && model.storages.first.is_a?(Backup::Storage::ProxmoxBackupServer)
+        if model.skip_packaging?
+          Logger.info "Skip packaging..." && return
+        end
 
         @package   = model.package
         @encryptor = model.encryptor

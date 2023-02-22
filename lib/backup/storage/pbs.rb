@@ -17,6 +17,10 @@ module Backup
         super
       end
 
+      def skip_packaging?
+        true
+      end
+
       private
 
       def transfer!
@@ -29,10 +33,10 @@ module Backup
       def backup_command
         @backup_command ||= begin
           cmd = "proxmox-backup-client backup #{name ? name : model.trigger}.pxar:#{Config.tmp_path} "
-          cmd << " #{Array(devices).map {|dev| "--include-dev #{dev}"}.join(" ")}".rstrip
-          cmd << " --keyfile #{encryption_key}" if !encryption_key.nil?
-          cmd << " --ns #{namespace}" if !namespace.nil?
-          cmd << " --backup-id #{backup_id}" if !backup_id.nil?
+          cmd << " #{Array(devices).map { |dev| "--include-dev #{dev}" }.join(" ")}".rstrip
+          cmd << " --keyfile #{encryption_key}" unless encryption_key.nil?
+          cmd << " --ns #{namespace}" unless namespace.nil?
+          cmd << " --backup-id #{backup_id}" unless backup_id.nil?
           cmd.rstrip
           "/bin/bash -c '#{environment} #{cmd}'"
         end
@@ -41,11 +45,11 @@ module Backup
       def environment
         @environment ||= begin
           environment = {}
-          
-          environment["PBS_REPOSITORY"] = repository if !repository.nil?
-          environment["PBS_PASSWORD"] = password if !password.nil?
-          environment["PBS_ENCRYPTION_PASSWORD"] = encryption_password if !encryption_password.nil?
-          environment["PBS_FINGERPRINT"] = fingerprint if !fingerprint.nil?
+
+          environment["PBS_REPOSITORY"] = repository unless repository.nil?
+          environment["PBS_PASSWORD"] = password unless password.nil?
+          environment["PBS_ENCRYPTION_PASSWORD"] = encryption_password unless encryption_password.nil?
+          environment["PBS_FINGERPRINT"] = fingerprint unless fingerprint.nil?
 
           environment.map do |key, value|
             "#{key}=#{value}"
